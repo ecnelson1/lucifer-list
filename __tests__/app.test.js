@@ -123,5 +123,27 @@ describe('app routes', () => {
 
       expect(data.body).toEqual(expectation);
     });
+    test('returns single character with matching id', async() => {
+    
+      const expectation = {
+        'id': 3,
+        'name': 'Daniel Espinoza',
+        'seasons': 5,
+        'is_divine': false,
+        'type': 'Human',
+        'owner_id': 1
+      };
+        
+    
+      const data = await fakeRequest(app)
+        .get('/characters/3')
+        .expect('Content-Type', /json/)
+        .expect(200);
+    
+      expect(data.body).toEqual(expectation);
+    });
+    
   });
 });
+
+
