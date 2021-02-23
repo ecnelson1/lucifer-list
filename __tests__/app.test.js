@@ -175,10 +175,31 @@ describe('app routes', () => {
       const eve = allChar.body.find(char => char.name === 'Eve');
   
       expect(eve).toEqual(expectedChar);
-  
-  
-  
-  
+    });
+    test('updates a character', async() => {
+      const newChar = {
+        name: 'Lady Lucifer',
+        seasons: 5,
+        is_divine: true,
+        type: 'Angel (Fallen)',
+      };
+
+      const expectedChar = {
+        ...newChar,
+        owner_id: 1,
+        id: 11
+      };
+      await fakeRequest(app)
+        .put('/characters/11')
+        .send(newChar)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      const updatedChar = await fakeRequest(app)
+        .get('/characters/11')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      expect(updatedChar.body).toEqual(expectedChar);
     });
   });
 
