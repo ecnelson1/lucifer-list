@@ -201,7 +201,32 @@ describe('app routes', () => {
         .expect(200);
       expect(updatedChar.body).toEqual(expectedChar);
     });
-  });
+    test('Deletes single character with matching id', async() => {
+    
+      const expectation = {
+        'id': 11,
+        'name': 'Lady Lucifer',
+        'seasons': 5,
+        'is_divine': true,
+        'type': 'Angel (Fallen)',
+        'owner_id': 1
+      };
+        
+    
+      const data = await fakeRequest(app)
+        .delete('/characters/11')
+        .expect('Content-Type', /json/)
+        .expect(200);
+    
+      expect(data.body).toEqual(expectation);
 
+      const removed = await fakeRequest(app)
+        .get('/characters/11')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(removed.body).toEqual('');
+    });
+  });
 });
 
