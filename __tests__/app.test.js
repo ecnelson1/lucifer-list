@@ -211,8 +211,7 @@ describe('app routes', () => {
         'type': 'Angel (Fallen)',
         'owner_id': 1
       };
-        
-    
+      
       const data = await fakeRequest(app)
         .delete('/characters/11')
         .expect('Content-Type', /json/)
