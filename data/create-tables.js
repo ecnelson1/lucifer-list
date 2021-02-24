@@ -26,7 +26,6 @@ async function run() {
                     name VARCHAR(512) NOT NULL,
                     seasons INTEGER NOT NULL,
                     is_divine BOOLEAN NOT NULL,
-                    type VARCHAR(512) NOT NULL,
                     type_id INTEGER NOT NULL,
                     owner_id INTEGER NOT NULL REFERENCES users(id)
             );

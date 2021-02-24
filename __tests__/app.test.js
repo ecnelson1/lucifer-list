@@ -35,9 +35,63 @@ describe('app routes', () => {
 
       const expectation = [
         {
-          'id': 10,
-          'name': 'Lillith',
-          'seasons': 2,
+          'id': 1,
+          'name': 'Lucifer Morningstar',
+          'seasons': 5,
+          'is_divine': true,
+          'type': 'Angel',
+          'type_id': 2,
+          'owner_id': 1
+        },
+        {
+          'id': 2,
+          'name': 'Chloe Decker',
+          'seasons': 5,
+          'is_divine': true,
+          'type': 'Human',
+          'type_id': 1,
+          'owner_id': 1
+        },
+        {
+          'id': 3,
+          'name': 'Daniel Espinoza',
+          'seasons': 5,
+          'is_divine': false,
+          'type': 'Human',
+          'type_id': 1,
+          'owner_id': 1
+        },
+        {
+          'id': 4,
+          'name': 'Amenadiel Firstborn',
+          'seasons': 5,
+          'is_divine': true,
+          'type': 'Angel',
+          'type_id': 2,
+          'owner_id': 1
+        },
+        {
+          'id': 5,
+          'name': 'Mazikeen of the Lilim',
+          'seasons': 5,
+          'is_divine': true,
+          'type': 'Demon',
+          'type_id': 4,
+          'owner_id': 1
+        },
+        {
+          'id': 6,
+          'name': 'Dr. Linda Martin',
+          'seasons': 5,
+          'is_divine': false,
+          'type': 'Human',
+          'type_id': 1,
+          'owner_id': 1
+        },
+        {
+          'id': 7,
+          'name': 'Ella lopez',
+          'seasons': 4,
           'is_divine': false,
           'type': 'Human',
           'type_id': 1,
@@ -53,60 +107,6 @@ describe('app routes', () => {
           'owner_id': 1
         },
         {
-          'id': 7,
-          'name': 'Ella lopez',
-          'seasons': 4,
-          'is_divine': false,
-          'type': 'Human',
-          'type_id': 1,
-          'owner_id': 1
-        },
-        {
-          'id': 6,
-          'name': 'Dr. Linda Martin',
-          'seasons': 5,
-          'is_divine': false,
-          'type': 'Human',
-          'type_id': 1,
-          'owner_id': 1
-        },
-        {
-          'id': 3,
-          'name': 'Daniel Espinoza',
-          'seasons': 5,
-          'is_divine': false,
-          'type': 'Human',
-          'type_id': 1,
-          'owner_id': 1
-        },
-        {
-          'id': 2,
-          'name': 'Chloe Decker',
-          'seasons': 5,
-          'is_divine': true,
-          'type': 'Human',
-          'type_id': 1,
-          'owner_id': 1
-        },
-        {
-          'id': 4,
-          'name': 'Amenadiel Firstborn',
-          'seasons': 5,
-          'is_divine': true,
-          'type': 'Angel',
-          'type_id': 2,
-          'owner_id': 1
-        },
-        {
-          'id': 1,
-          'name': 'Lucifer Morningstar',
-          'seasons': 5,
-          'is_divine': true,
-          'type': 'Angel',
-          'type_id': 2,
-          'owner_id': 1
-        },
-        {
           'id': 9,
           'name': 'Mum',
           'seasons': 2,
@@ -116,12 +116,12 @@ describe('app routes', () => {
           'owner_id': 1
         },
         {
-          'id': 5,
-          'name': 'Mazikeen of the Lilim',
-          'seasons': 5,
-          'is_divine': true,
-          'type': 'Demon',
-          'type_id': 4,
+          'id': 10,
+          'name': 'Lillith',
+          'seasons': 2,
+          'is_divine': false,
+          'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         }
       ];
@@ -157,20 +157,19 @@ describe('app routes', () => {
     test('inserts a new item in the data table of the database, and returns full copy of the new item.', async() => {
       
       const newChar = {
-        'name': 'Eve',
-        'seasons': 2,
-        'is_divine': false,
-        'type': 'Human',
-        'type_id': 1,
+        name: 'Eve',
+        seasons: 2,
+        is_divine: false,
+        type_id: 1,
       };
-  
       const expectedChar = {
         ...newChar,
         id: 11,
         owner_id: 1,
+        
       };
-    
-  
+      
+      
       const data = await fakeRequest(app)
         .post('/characters')
         .send(newChar)
@@ -178,15 +177,21 @@ describe('app routes', () => {
         .expect(200);
       
       expect(data.body).toEqual(expectedChar);
-  
+      
       const allChar = await fakeRequest(app)
-        .get('/characters')
+        .get('/characters/')
         .expect('Content-Type', /json/)
         .expect(200);
+
+
+      const getExpectation = {
+        ...expectedChar,
+        type: 'Human',
+      };     
       
       const eve = allChar.body.find(char => char.name === 'Eve');
   
-      expect(eve).toEqual(expectedChar);
+      expect(eve).toEqual(getExpectation);
     });
     test('updates a character', async() => {
       const newChar = {
@@ -221,7 +226,6 @@ describe('app routes', () => {
         'name': 'Lady Lucifer',
         'seasons': 5,
         'is_divine': true,
-        'type': 'Angel',
         'type_id': 2,
         'owner_id': 1
       };

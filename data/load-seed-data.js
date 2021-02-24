@@ -43,14 +43,13 @@ async function run() {
       characters.map(character => {
         // const typesId = getTypeById(character, types);
         return client.query(`
-                    INSERT INTO characters (name, seasons, is_divine, type, type_id, owner_id)
-                    VALUES ($1, $2, $3, $4, $5, $6);
+                    INSERT INTO characters (name, seasons, is_divine, type_id, owner_id)
+                    VALUES ($1, $2, $3, $4, $5 );
                 `,
         [
           character.name, 
           character.seasons, 
           character.is_divine,
-          character.type, 
           character.type_id, 
           user.id
         ]);
