@@ -143,7 +143,89 @@ describe('app routes', () => {
       expect(data.body).toEqual(expectation);
     });
     
+    test('inserts a new item in the data table of the database, and returns full copy of the new item.', async() => {
+      
+      const newChar = {
+        'name': 'Eve',
+        'seasons': 2,
+        'is_divine': false,
+        'type': 'Human',
+      };
+  
+      const expectedChar = {
+        ...newChar,
+        id: 11,
+        owner_id: 1,
+      };
+    
+  
+      const data = await fakeRequest(app)
+        .post('/characters')
+        .send(newChar)
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(data.body).toEqual(expectedChar);
+  
+      const allChar = await fakeRequest(app)
+        .get('/characters')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      const eve = allChar.body.find(char => char.name === 'Eve');
+  
+      expect(eve).toEqual(expectedChar);
+    });
+    test('updates a character', async() => {
+      const newChar = {
+        name: 'Lady Lucifer',
+        seasons: 5,
+        is_divine: true,
+        type: 'Angel (Fallen)',
+      };
+
+      const expectedChar = {
+        ...newChar,
+        owner_id: 1,
+        id: 11
+      };
+      await fakeRequest(app)
+        .put('/characters/11')
+        .send(newChar)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      const updatedChar = await fakeRequest(app)
+        .get('/characters/11')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      expect(updatedChar.body).toEqual(expectedChar);
+    });
+    test('Deletes single character with matching id', async() => {
+    
+      const expectation = {
+        'id': 11,
+        'name': 'Lady Lucifer',
+        'seasons': 5,
+        'is_divine': true,
+        'type': 'Angel (Fallen)',
+        'owner_id': 1
+      };
+      
+      const data = await fakeRequest(app)
+        .delete('/characters/11')
+        .expect('Content-Type', /json/)
+        .expect(200);
+    
+      expect(data.body).toEqual(expectation);
+
+      const removed = await fakeRequest(app)
+        .get('/characters/11')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(removed.body).toEqual('');
+    });
   });
 });
-
 
