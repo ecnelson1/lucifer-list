@@ -35,51 +35,21 @@ describe('app routes', () => {
 
       const expectation = [
         {
-          'id': 1,
-          'name': 'Lucifer Morningstar',
-          'seasons': 5,
-          'is_divine': true,
-          'type': 'Angel (Fallen)',
-          'owner_id': 1
-        },
-        {
-          'id': 2,
-          'name': 'Chloe Decker',
-          'seasons': 5,
-          'is_divine': true,
-          'type': 'Human',
-          'owner_id': 1
-        },
-        {
-          'id': 3,
-          'name': 'Daniel Espinoza',
-          'seasons': 5,
+          'id': 10,
+          'name': 'Lillith',
+          'seasons': 2,
           'is_divine': false,
           'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         },
         {
-          'id': 4,
-          'name': 'Amenadiel Firstborn',
-          'seasons': 5,
+          'id': 8,
+          'name': 'Cain/ Marcus Pierce',
+          'seasons': 1,
           'is_divine': true,
-          'type': 'Angel',
-          'owner_id': 1
-        },
-        {
-          'id': 5,
-          'name': 'Mazikeen of the Lilim',
-          'seasons': 5,
-          'is_divine': true,
-          'type': 'Demon',
-          'owner_id': 1
-        },
-        {
-          'id': 6,
-          'name': 'Dr. Linda Martin',
-          'seasons': 5,
-          'is_divine': false,
           'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         },
         {
@@ -88,14 +58,52 @@ describe('app routes', () => {
           'seasons': 4,
           'is_divine': false,
           'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         },
         {
-          'id': 8,
-          'name': 'Cain/ Marcus Pierce',
-          'seasons': 1,
+          'id': 6,
+          'name': 'Dr. Linda Martin',
+          'seasons': 5,
+          'is_divine': false,
+          'type': 'Human',
+          'type_id': 1,
+          'owner_id': 1
+        },
+        {
+          'id': 3,
+          'name': 'Daniel Espinoza',
+          'seasons': 5,
+          'is_divine': false,
+          'type': 'Human',
+          'type_id': 1,
+          'owner_id': 1
+        },
+        {
+          'id': 2,
+          'name': 'Chloe Decker',
+          'seasons': 5,
           'is_divine': true,
-          'type': 'Human (Cursed)',
+          'type': 'Human',
+          'type_id': 1,
+          'owner_id': 1
+        },
+        {
+          'id': 4,
+          'name': 'Amenadiel Firstborn',
+          'seasons': 5,
+          'is_divine': true,
+          'type': 'Angel',
+          'type_id': 2,
+          'owner_id': 1
+        },
+        {
+          'id': 1,
+          'name': 'Lucifer Morningstar',
+          'seasons': 5,
+          'is_divine': true,
+          'type': 'Angel',
+          'type_id': 2,
           'owner_id': 1
         },
         {
@@ -103,15 +111,17 @@ describe('app routes', () => {
           'name': 'Mum',
           'seasons': 2,
           'is_divine': true,
-          'type': 'Goddess of Creation',
+          'type': 'Goddess',
+          'type_id': 3,
           'owner_id': 1
         },
         {
-          'id': 10,
-          'name': 'Lillith',
-          'seasons': 2,
-          'is_divine': false,
-          'type': 'Human (Prior-Immortal)',
+          'id': 5,
+          'name': 'Mazikeen of the Lilim',
+          'seasons': 5,
+          'is_divine': true,
+          'type': 'Demon',
+          'type_id': 4,
           'owner_id': 1
         }
       ];
@@ -126,17 +136,18 @@ describe('app routes', () => {
     test('returns single character with matching id', async() => {
     
       const expectation = {
-        'id': 3,
-        'name': 'Daniel Espinoza',
+        'id': 1,
+        'name': 'Lucifer Morningstar',
         'seasons': 5,
-        'is_divine': false,
-        'type': 'Human',
+        'is_divine': true,
+        'type': 'Angel',
+        'type_id': 2,
         'owner_id': 1
       };
         
     
       const data = await fakeRequest(app)
-        .get('/characters/3')
+        .get('/characters/1')
         .expect('Content-Type', /json/)
         .expect(200);
     
@@ -150,6 +161,7 @@ describe('app routes', () => {
         'seasons': 2,
         'is_divine': false,
         'type': 'Human',
+        'type_id': 1,
       };
   
       const expectedChar = {
@@ -181,7 +193,8 @@ describe('app routes', () => {
         name: 'Lady Lucifer',
         seasons: 5,
         is_divine: true,
-        type: 'Angel (Fallen)',
+        type: 'Angel',
+        type_id: 2
       };
 
       const expectedChar = {
@@ -208,7 +221,8 @@ describe('app routes', () => {
         'name': 'Lady Lucifer',
         'seasons': 5,
         'is_divine': true,
-        'type': 'Angel (Fallen)',
+        'type': 'Angel',
+        'type_id': 2,
         'owner_id': 1
       };
       
