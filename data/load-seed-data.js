@@ -1,7 +1,7 @@
 const client = require('../lib/client');
 // import our seed data:
 const characters = require('./lucilist.js');
-const typesArray = require('./class-types.js');
+const types = require('./class-types.js');
 const usersData = require('./users.js');
 const { getEmoji } = require('../lib/emoji.js');
 // const { getTypeById } = require('./data-utils.js');
@@ -24,8 +24,8 @@ async function run() {
       })
     );
 
-    const responses = await Promise.all(
-      typesArray.map(type => {
+    await Promise.all(
+      types.map(type => {
         return client.query(`
         INSERT INTO types (type)
         VALUES ($1)
@@ -37,11 +37,8 @@ async function run() {
       
     const user = users[0].rows[0];
 
-    // const types = responses.map(({ rows }) => rows[0]);
-
     await Promise.all(
       characters.map(character => {
-        // const typesId = getTypeById(character, types);
         return client.query(`
                     INSERT INTO characters (name, seasons, is_divine, type_id, owner_id)
                     VALUES ($1, $2, $3, $4, $5 );
