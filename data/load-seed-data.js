@@ -1,8 +1,10 @@
 const client = require('../lib/client');
 // import our seed data:
 const characters = require('./lucilist.js');
+const typesData = require('./class-types.js');
 const usersData = require('./users.js');
 const { getEmoji } = require('../lib/emoji.js');
+// const { getTypeById } = require('./data-utils.js');
 
 run();
 
@@ -21,19 +23,35 @@ async function run() {
         [user.email, user.hash]);
       })
     );
-      
-    const user = users[0].rows[0];
-
+    
     await Promise.all(
-      characters.map(character => {
+      typesData.map(type => {
         return client.query(`
-                    INSERT INTO characters (name, seasons, is_divine, type, owner_id)
-                    VALUES ($1, $2, $3, $4, $5);
-                `,
-        [character.name, character.seasons, character.is_divine, character.type, user.id]);
+          INSERT INTO types (type)
+          VALUES ($1)
+          RETURNING *;
+          `,
+        [type.type]);
       })
     );
     
+    const user = users[0].rows[0];
+    await Promise.all(
+      characters.map(character => {
+        return client.query(`
+        INSERT INTO characters (name, seasons, is_divine, type_id, owner_id)
+        VALUES ($1, $2, $3, $4, $5 );
+        `,
+        [
+          character.name, 
+          character.seasons, 
+          character.is_divine,
+          character.type_id, 
+          user.id
+        ]);
+      })
+    );
+      
 
     console.log('seed data load complete', getEmoji(), getEmoji(), getEmoji());
   }

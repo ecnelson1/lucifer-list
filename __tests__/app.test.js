@@ -39,7 +39,8 @@ describe('app routes', () => {
           'name': 'Lucifer Morningstar',
           'seasons': 5,
           'is_divine': true,
-          'type': 'Angel (Fallen)',
+          'type': 'Angel',
+          'type_id': 2,
           'owner_id': 1
         },
         {
@@ -48,6 +49,7 @@ describe('app routes', () => {
           'seasons': 5,
           'is_divine': true,
           'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         },
         {
@@ -56,6 +58,7 @@ describe('app routes', () => {
           'seasons': 5,
           'is_divine': false,
           'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         },
         {
@@ -64,6 +67,7 @@ describe('app routes', () => {
           'seasons': 5,
           'is_divine': true,
           'type': 'Angel',
+          'type_id': 2,
           'owner_id': 1
         },
         {
@@ -72,6 +76,7 @@ describe('app routes', () => {
           'seasons': 5,
           'is_divine': true,
           'type': 'Demon',
+          'type_id': 4,
           'owner_id': 1
         },
         {
@@ -80,6 +85,7 @@ describe('app routes', () => {
           'seasons': 5,
           'is_divine': false,
           'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         },
         {
@@ -88,6 +94,7 @@ describe('app routes', () => {
           'seasons': 4,
           'is_divine': false,
           'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         },
         {
@@ -95,7 +102,8 @@ describe('app routes', () => {
           'name': 'Cain/ Marcus Pierce',
           'seasons': 1,
           'is_divine': true,
-          'type': 'Human (Cursed)',
+          'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         },
         {
@@ -103,7 +111,8 @@ describe('app routes', () => {
           'name': 'Mum',
           'seasons': 2,
           'is_divine': true,
-          'type': 'Goddess of Creation',
+          'type': 'Goddess',
+          'type_id': 3,
           'owner_id': 1
         },
         {
@@ -111,7 +120,8 @@ describe('app routes', () => {
           'name': 'Lillith',
           'seasons': 2,
           'is_divine': false,
-          'type': 'Human (Prior-Immortal)',
+          'type': 'Human',
+          'type_id': 1,
           'owner_id': 1
         }
       ];
@@ -126,17 +136,18 @@ describe('app routes', () => {
     test('returns single character with matching id', async() => {
     
       const expectation = {
-        'id': 3,
-        'name': 'Daniel Espinoza',
+        'id': 1,
+        'name': 'Lucifer Morningstar',
         'seasons': 5,
-        'is_divine': false,
-        'type': 'Human',
+        'is_divine': true,
+        'type': 'Angel',
+        'type_id': 2,
         'owner_id': 1
       };
         
     
       const data = await fakeRequest(app)
-        .get('/characters/3')
+        .get('/characters/1')
         .expect('Content-Type', /json/)
         .expect(200);
     
@@ -146,19 +157,19 @@ describe('app routes', () => {
     test('inserts a new item in the data table of the database, and returns full copy of the new item.', async() => {
       
       const newChar = {
-        'name': 'Eve',
-        'seasons': 2,
-        'is_divine': false,
-        'type': 'Human',
+        name: 'Eve',
+        seasons: 2,
+        is_divine: false,
+        type_id: 1,
       };
-  
       const expectedChar = {
         ...newChar,
         id: 11,
         owner_id: 1,
+        
       };
-    
-  
+      
+      
       const data = await fakeRequest(app)
         .post('/characters')
         .send(newChar)
@@ -166,22 +177,29 @@ describe('app routes', () => {
         .expect(200);
       
       expect(data.body).toEqual(expectedChar);
-  
+      
       const allChar = await fakeRequest(app)
-        .get('/characters')
+        .get('/characters/')
         .expect('Content-Type', /json/)
         .expect(200);
+
+
+      const getExpectation = {
+        ...expectedChar,
+        type: 'Human',
+      };     
       
       const eve = allChar.body.find(char => char.name === 'Eve');
   
-      expect(eve).toEqual(expectedChar);
+      expect(eve).toEqual(getExpectation);
     });
     test('updates a character', async() => {
       const newChar = {
         name: 'Lady Lucifer',
         seasons: 5,
         is_divine: true,
-        type: 'Angel (Fallen)',
+        type: 'Angel',
+        type_id: 2
       };
 
       const expectedChar = {
@@ -208,7 +226,7 @@ describe('app routes', () => {
         'name': 'Lady Lucifer',
         'seasons': 5,
         'is_divine': true,
-        'type': 'Angel (Fallen)',
+        'type_id': 2,
         'owner_id': 1
       };
       
